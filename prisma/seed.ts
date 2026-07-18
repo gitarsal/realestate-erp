@@ -106,13 +106,13 @@ async function main() {
 
   // ── Company ──
   const company = await prisma.company.create({
-    data: { name: 'SHE Technologies', code: 'SHE001', address: 'Lahore, Pakistan', phone: '+92 42 12345678', email: 'info@shetechnologies.com' },
+    data: { name: 'HE Technologies', code: 'HE001', address: 'Lahore, Pakistan', phone: '+92 42 12345678', email: 'info@hetechnologies.com' },
   });
 
   // ── Users ──
   const password = await bcrypt.hash('admin123', 12);
-  await prisma.user.create({ data: { email: 'admin@she.com', username: 'admin', passwordHash: password, firstName: 'Admin', lastName: 'User', roleId: superAdminRole.id } });
-  await prisma.user.create({ data: { email: 'sales@she.com', username: 'sales', passwordHash: password, firstName: 'Ahmad', lastName: 'Raza', roleId: salesRole.id } });
+  await prisma.user.create({ data: { email: 'admin@he.com', username: 'admin', passwordHash: password, firstName: 'Admin', lastName: 'User', roleId: superAdminRole.id } });
+  await prisma.user.create({ data: { email: 'sales@he.com', username: 'sales', passwordHash: password, firstName: 'Ahmad', lastName: 'Raza', roleId: salesRole.id } });
 
   // ── Departments & Designations ──
   const deptNames = ['Sales', 'Accounts', 'Construction', 'HR', 'CRM'];
