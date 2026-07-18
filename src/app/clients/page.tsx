@@ -6,7 +6,7 @@ import AppShell from "@/components/AppShell";
 interface ApiClient {
   id: string; name: string; cnic: string; phone: string;
   email: string | null; address: string | null; category: string | null;
-  source: string | null; createdAt: string;
+  source: string | null; regNo: string | null; createdAt: string;
   files: { regNo: string; bookingNo: string | null; status: string; project: { id: string; name: string }; unit: { id: string; plotNo: string; block: { name: string } | null } | null }[];
 }
 interface RowClient {
@@ -18,12 +18,11 @@ interface RowClient {
 
 function mapClient(c: ApiClient): RowClient {
   const files = c.files || [];
-  const f = files[0];
   return {
     id: c.id, name: c.name, cnic: c.cnic, phone: c.phone,
     email: c.email || "", address: c.address || "", category: c.category || "",
-    status: f?.status || "registered",
-    registrationNo: f?.regNo || "—", createdAt: c.createdAt,
+    status: files[0]?.status || "registered",
+    registrationNo: c.regNo || "—", createdAt: c.createdAt,
     bookingCount: files.length,
   };
 }

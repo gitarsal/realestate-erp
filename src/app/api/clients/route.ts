@@ -10,10 +10,10 @@ export async function GET(request: Request) {
 
     const where = search ? {
       OR: [
+        { regNo: { contains: search, mode: 'insensitive' as const } },
         { name: { contains: search, mode: 'insensitive' as const } },
         { cnic: { contains: search } },
         { phone: { contains: search } },
-        { files: { some: { regNo: { contains: search, mode: 'insensitive' as const } } } },
       ],
     } : {};
 
@@ -83,6 +83,13 @@ export async function POST(request: Request) {
         address: address || null,
         category: category || null,
         source: source || 'manual',
+        regNo: (() => {
+          const now = new Date();
+          const yr = now.getFullYear().toString().slice(-2);
+          const mo = (now.getMonth() + 1).toString().padStart(2, '0');
+          const rand = Math.floor(Math.random() * 99999).toString().padStart(5, '0');
+          return `CLI-${yr}${mo}-${rand}`;
+        })(),
       },
     });
 

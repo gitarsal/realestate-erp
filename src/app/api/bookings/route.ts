@@ -15,6 +15,7 @@ export async function GET(request: Request) {
     if (search) {
       where.OR = [
         { regNo: { contains: search, mode: 'insensitive' as const } },
+        { client: { regNo: { contains: search, mode: 'insensitive' as const } } },
         { client: { name: { contains: search, mode: 'insensitive' as const } } },
         { client: { cnic: { contains: search } } },
       ];
@@ -23,7 +24,7 @@ export async function GET(request: Request) {
     const files = await prisma.file.findMany({
       where,
       include: {
-        client: { select: { id: true, name: true, cnic: true, phone: true } },
+        client: { select: { id: true, name: true, cnic: true, phone: true, regNo: true } },
         project: { select: { id: true, name: true } },
         unit: { select: { id: true, plotNo: true, block: { select: { name: true } }, price: true, status: true } },
         paymentPlan: {
@@ -48,6 +49,7 @@ export async function GET(request: Request) {
         id: f.id,
         regNo: f.regNo,
         bookingNo: f.bookingNo,
+        clientRegNo: f.client.regNo || '—',
         clientId: f.clientId,
         clientName: f.client.name,
         clientCnic: f.client.cnic,

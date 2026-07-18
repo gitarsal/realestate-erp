@@ -206,8 +206,13 @@ async function main() {
   ];
 
   const clients = [];
-  for (const cd of clientData) {
-    const c = await prisma.client.create({ data: { ...cd, source: 'referral' } });
+  for (let i = 0; i < clientData.length; i++) {
+    const cd = clientData[i];
+    const now = new Date();
+    const yr = now.getFullYear().toString().slice(-2);
+    const mo = (now.getMonth() + 1).toString().padStart(2, '0');
+    const num = (i + 1).toString().padStart(4, '0');
+    const c = await prisma.client.create({ data: { ...cd, source: 'referral', regNo: `CLI-${yr}${mo}-${num}` } });
     clients.push(c);
   }
 

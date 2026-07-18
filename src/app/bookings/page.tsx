@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import AppShell from "@/components/AppShell";
 
 interface Booking {
-  id: string; regNo: string; bookingNo: string; clientId: string; clientName: string; clientCnic: string; clientPhone: string;
+  id: string; regNo: string; bookingNo: string; clientRegNo: string; clientId: string; clientName: string; clientCnic: string; clientPhone: string;
   projectId: string; projectName: string; unitId: string; plotNo: string; blockName: string;
   unitPrice: number; totalAmount: number; downPayment: number; rebateAmount: number;
   totalPaid: number; remaining: number; totalInstallments: number; paidInstallments: number;
@@ -166,6 +166,7 @@ function BookingsContent() {
   const filtered = bookings.filter(
     (b) => (b.clientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
             b.regNo.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (b.clientRegNo || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
             b.plotNo.toLowerCase().includes(searchTerm.toLowerCase())) &&
            (filterProject === "All" || b.projectName === filterProject) &&
            (filterStatus === "All" || b.status === filterStatus)
@@ -220,7 +221,7 @@ function BookingsContent() {
             <table>
               <thead>
                 <tr>
-                   <th>Booking No</th><th>Reg No</th><th>Client</th><th>Project</th><th>Plot</th>
+                   <th>File No</th><th>Reg No</th><th>Client</th><th>Project</th><th>Plot</th>
                   <th>Total Price</th><th>Paid</th><th>Remaining</th><th>Installments</th><th>Status</th><th>Actions</th>
                 </tr>
               </thead>
@@ -229,8 +230,8 @@ function BookingsContent() {
                   <tr><td colSpan={11} className="text-center py-8 text-muted-foreground text-sm">No bookings found</td></tr>
                 ) : filtered.map((b) => (
                   <tr key={b.id}>
-                    <td className="font-mono text-sm font-medium">{b.bookingNo || '—'}</td>
-                    <td className="font-mono text-xs text-muted-foreground">{b.regNo}</td>
+                    <td className="font-mono text-sm font-medium">{b.regNo || '—'}</td>
+                    <td className="font-mono text-xs text-muted-foreground">{b.clientRegNo || '—'}</td>
                     <td className="font-medium">{b.clientName}</td>
                     <td>{b.projectName}</td>
                     <td>{b.blockName ? `${b.blockName}-` : ""}{b.plotNo}</td>
@@ -336,8 +337,8 @@ function BookingsContent() {
             </div>
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
-                <div><label className="text-xs text-muted-foreground">Booking No</label><p className="font-mono text-sm font-medium">{viewBooking.bookingNo || '—'}</p></div>
-                <div><label className="text-xs text-muted-foreground">Reg No</label><p className="font-mono text-xs text-muted-foreground">{viewBooking.regNo}</p></div>
+                <div><label className="text-xs text-muted-foreground">File No</label><p className="font-mono text-sm font-medium">{viewBooking.regNo || '—'}</p></div>
+                <div><label className="text-xs text-muted-foreground">Reg No</label><p className="font-mono text-xs text-muted-foreground">{viewBooking.clientRegNo || '—'}</p></div>
                 <div><label className="text-xs text-muted-foreground">Status</label><p>                  <span className={`status-badge ${viewBooking.status === 'active' ? 'bg-green-100 text-green-800' : viewBooking.status === 'completed' ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}`}>{viewBooking.status.replace('_', ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}</span></p></div>
                 <div><label className="text-xs text-muted-foreground">Client</label><p className="font-medium">{viewBooking.clientName}</p></div>
                 <div><label className="text-xs text-muted-foreground">CNIC</label><p className="font-mono text-sm">{viewBooking.clientCnic}</p></div>

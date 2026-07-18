@@ -151,6 +151,7 @@ model UnitStatusHistory {
 
 model Client {
   id           String   @id @default(uuid())
+  regNo        String?  @unique @map("reg_no")
   name         String
   cnic         String   @unique
   phone        String
